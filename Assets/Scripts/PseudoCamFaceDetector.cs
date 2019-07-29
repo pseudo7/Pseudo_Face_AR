@@ -11,9 +11,10 @@ public class PseudoCamFaceDetector : MonoBehaviour
     [SerializeField] RawImage overlayImage;
     [SerializeField] AspectRatioFitter overlayFitter;
     [SerializeField] Sprite glassSprite;
+    [SerializeField] Sprite wigSprite;
 
 
-    public float offset;
+    //public float offset;
 
     const int MAX_FACES = 1;
 
@@ -29,6 +30,7 @@ public class PseudoCamFaceDetector : MonoBehaviour
     };
 
     private List<Image> spexMap;
+    private List<Image> hairMap;
     private FaceLandmarkDetector faceLandmarkDetector;
     private bool hasInit, reArrange;
     private bool fillVertically;
@@ -47,6 +49,7 @@ public class PseudoCamFaceDetector : MonoBehaviour
         yield return new WaitUntil(() => streamManager.CamStreamLoaded);
         SetupFaceDetection();
         SetupGlasses();
+        SetupHair();
     }
 
     private void Update()
@@ -86,6 +89,7 @@ public class PseudoCamFaceDetector : MonoBehaviour
     void SetupFaceDetection()
     {
         spexMap = new List<Image>();
+        hairMap = new List<Image>();
         faceLandmarkDetector = new FaceLandmarkDetector(System.IO.Path.Combine(Application.streamingAssetsPath, LibraryMap[library]));
         faceLandmarkDetector.SetImage(streamManager.WebCam);
         textureWidth = streamManager.WebCam.width;
@@ -121,14 +125,18 @@ public class PseudoCamFaceDetector : MonoBehaviour
 
     void SetupHair()
     {
+        Vector3 wigOffset = new Vector2(textureWidth * -.005f, textureHeight * .15f);
+
         for (int i = 0; i < MAX_FACES; i++)
         {
             var wig = new GameObject("Wig " + i).AddComponent<Image>();
             wig.preserveAspect = true;
-            wig.transform.SetParent(spawnParent, false);
-            wig.transform.localScale = new Vector3(widthRatio, widthRatio, 1);
-            wig.sprite = glassSprite;
-            spexMap.Add(wig);
+            wig.transform.SetParent(spexMap[i].transform, false);
+            wig.transform.localScale = Vector3.one;// new Vector3(4.8f, 4.8f, 1);
+            wig.sprite = wigSprite;
+            hairMap.Add(wig);
+
+            hairMap[i].rectTransform.localPosition = spexMap[i].rectTransform.localPosition + wigOffset;
         }
     }
 
@@ -169,11 +177,13 @@ public class PseudoCamFaceDetector : MonoBehaviour
         //Debug.Log($"Re Arranged: {leftEye} {rightEye}");
 
         spexMap[spexIndex].rectTransform.sizeDelta = new Vector2(size * (fillVertically ? 1.85f : 1.65f), size);
+        hairMap[wigIndex].rectTransform.sizeDelta = new Vector2(size * (fillVertically ? 2.4f : 2.2f), size * 5);
 
         //Debug.Log((Screen.height - (textureHeight * widthRatio)) / 2);
         //Debug.Log(((heightRatio)));
         var newPoint = (leftEye + rightEye) / 2;
         Vector2 spexPos;
+
         if (fillVertically)
             spexPos = new Vector3((newPoint.x * heightRatio) - (textureWidth * heightRatio / 2), (textureHeight * heightRatio / 2) - (newPoint.y * heightRatio) /*(Screen.width / streamManager.WebCamRatio) * ((newPoint.y * widthRatio)) /* (Screen.height / 2 - ((newPoint.y - widthRatio) * widthRatio)) /*- ((Screen.height / 2) + (widthRatio * textureHeight))*/);
         else
