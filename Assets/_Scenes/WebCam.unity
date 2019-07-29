@@ -585,7 +585,7 @@ MonoBehaviour:
   aspectMode: 4
   background: {fileID: 1279013819}
   fitter: {fileID: 1279013822}
-  camQuality: 20
+  camQuality: 50
   useFrontCamera: 0
 --- !u!1 &1396548192
 GameObject:
@@ -688,7 +688,6 @@ MonoBehaviour:
   overlayFitter: {fileID: 171563292}
   glassSprite: {fileID: 21300000, guid: ef4c16c17f7d842728c1c36177c4d673, type: 3}
   wigSprite: {fileID: 21300000, guid: bb4a865de29bd44118aebc7efb145a3e, type: 3}
-  offset: 0.15
 --- !u!4 &1937242215
 Transform:
   m_ObjectHideFlags: 0

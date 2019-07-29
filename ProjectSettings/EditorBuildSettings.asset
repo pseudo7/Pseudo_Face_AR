@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/WebCam.unity
     guid: fc8633102b39448d3bb806702228dc9c
+  - enabled: 1
+    path: Assets/Imports/CVVTuberExample/CVVTuber/Examples/WebCamTextureCVVTuberExample/WebCamTextureCVVTuberExample.unity
+    guid: 3547b45d3a670fa428bb50c330c318c6
   m_configObjects: {}
