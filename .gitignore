@@ -3,10 +3,12 @@
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
-Assets/AssetStoreTools*
+Assets/AssetStoreTools* 
 
-# Imports
-Assets/Imports
+# Specific
+Assets/Imports/
+Assets/Logs/
+Assets/StreamingAssets/
 
 # Visual Studio cache directory
 .vs/
